@@ -15,15 +15,15 @@ clc
 fs = 90e3;
 t  = 0:1/fs:1-(1/fs);
 
-Am1 = 1; f1 = 440;  Ao1 = 1;                % AM DSB
-Am2 = 1; f2 = 770;  Ao2 = 0;                % AM DSB-SC
-Am3 = 1; f3 = 10e3; Ao3 = 0;                % Portadora1
-Am4 = 1; f4 = 15e3; Ao4 = 0;                % Portadora2
+Am1 = 1; f1 = 440;  Ao1 = 1;                % Parametros AM DSB
+Am2 = 1; f2 = 770;  Ao2 = 0;                % Parametros AM DSB-SC
+Am3 = 1; f3 = 10e3; Ao3 = 0;                % Parametros Portadora1
+Am4 = 1; f4 = 15e3; Ao4 = 0;                % Parametros Portadora2
 
-som1 = Ao1 + Am1*cos(2*pi*f1*t);
-som2 = Ao2 + Am2*cos(2*pi*f2*t);
-por1 = Ao3 + Am3*cos(2*pi*f3*t);
-por2 = Ao4 + Am4*cos(2*pi*f4*t); 
+som1 = Ao1 + Am1*cos(2*pi*f1*t);            % AM DSB
+som2 = Ao2 + Am2*cos(2*pi*f2*t);            % AM DSB-SC
+por1 = Ao3 + Am3*cos(2*pi*f3*t);            % Portadora 1
+por2 = Ao4 + Am4*cos(2*pi*f4*t);            % Portadora 2
 
 y1 = por1.*som1;                            % Sinal modulado1 AM DSB
 y2 = por2.*som2;                            % Sinal modulado2 AM DSB-SC

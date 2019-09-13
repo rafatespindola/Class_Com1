@@ -3,8 +3,8 @@
 %   12k e 14k para a transmissão em um canal de comunicação
 % • Recuperar os sinais originais
 
-close all
 %clear all
+close all
 clc
 
 fs = 90e3;                          % Frequencia de amostragem
@@ -102,11 +102,11 @@ filtro_11k = [zeros(1, 33000) ones(1, 2000) zeros(1, 20000) ones(1, 2000) zeros(
 filtro_14k = [zeros(1, 30000) ones(1, 2000) zeros(1, 26000) ones(1, 2000) zeros(1, 30000)];
 filtro_17k = [zeros(1, 27000) ones(1, 2000) zeros(1, 32000) ones(1, 2000) zeros(1, 27000)];
 
-% Sinal filtrado na frequencia com filtro ideal
-% Filtrado apenas banda lateral superior
-s_f1_filtrado = filtro_11k.*s_f1;
-s_f2_filtrado = filtro_14k.*s_f2;
-s_f3_filtrado = filtro_17k.*s_f3;
+                                  % Sinal filtrado na frequencia com filtro ideal
+                                  % Filtrado apenas banda lateral superior
+s_f1_filtrado = filtro_11k.*s_f1; % Excluindo componente de frequencia de 9KHz
+s_f2_filtrado = filtro_14k.*s_f2; % Excluindo componente de frequencia de 10KHz
+s_f3_filtrado = filtro_17k.*s_f3; % Excluindo componente de frequencia de 11KHz
 
 figure(2)
 subplot(331)
@@ -211,12 +211,11 @@ ylim([0 0.3])
 title("Filtrado em 17KHz")
 
 
-% Convoluindo sinal filtrado pela portadora
-% para obter o sinal na frequencia original
-% Tudo isso no dominio da frequencia
-%y_21k_1k = conv(y_11k, c_f1);
-%y_26k_2k = conv(y_14k, c_f2);
-%y_31k_3k = conv(y_17k, c_f3);
+                              % Convoluindo sinal filtrado e portadora
+                              % para obter o sinal na frequencia original
+y_21k_1k = conv(y_11k, c_f1); % Convoluindo 11KHz com 10KHz
+y_26k_2k = conv(y_14k, c_f2); % Convoluindo 14KHz com 12KHz
+y_31k_3k = conv(y_17k, c_f3); % Convoluindo 17KHz com 14KHz
 
 f2 = -fs:fs-2; % Eixo da frequencia do sinal convoluido
 
@@ -273,7 +272,7 @@ title("Sinal convoluido 31KHz e 3KHz")
 % para os 3 sinais
 filtro_pb_4k = [zeros(1, 86000) ones(1, 7999) zeros(1, 86000)];
 
-%% Filtrando apenas a frequencia original
+                               % Filtrando apenas a frequencia original
 y_1k = y_21k_1k.*filtro_pb_4k; % Obtendo apenas a frequencia de 1kHz
 y_2k = y_26k_2k.*filtro_pb_4k; % Obtendo apenas a frequencia de 2kHz
 y_3k = y_31k_3k.*filtro_pb_4k; % Obtendo apenas a frequencia de 3kHz
