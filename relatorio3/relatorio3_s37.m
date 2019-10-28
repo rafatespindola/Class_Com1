@@ -2,7 +2,8 @@
 
 %    Aluno: Rafael Teles Espindola
 %    Relatório 3
-%    Transmissão binária em banda base com e sem filtro casado
+%    Laboratório Transmissão binária e análise de desempenho de erro
+%    Parte 1
 
 %    • Simular uma transmissão binária com os seguintes
 %      parâmetros:
@@ -14,6 +15,11 @@
 %    • Apresentar os gráficos de todos os estágios da transmissão,
 %      comentar e concluir os resultados;
 
+% Unipolar:
+% Info:[0 1 1 0 1 0 1 1 0 1 0]  
+%  1_ |   ___   _   ___   _           
+%  0_ | _|   |_| |_|   |_| |_             
+% -1_ |
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 pkg load signal           % upsample
@@ -31,9 +37,10 @@ filtro_tx = ones(1,N);                     % Preparando filtro
 filtro_rx = fliplr(filtro_tx);             % Preparando filtro
 
 info_tx   = filter(filtro_tx, 1, info_up); % Info filtrada/formatada pronta para enviar
-info_rx   = awgn(info_tx,10);              % Info que chega ao Rx passou por um canal awgn
 
-info_rx_filter      = filter(filtro_rx, 1, info_rx)/N;  % Info recebida filtrada com o filtro casado
+info_rx        = awgn(info_tx,10);                 % Info que chega ao Rx passou por um canal awgn
+info_rx_filter = filter(filtro_rx, 1, info_rx)/N;  % Info recebida filtrada com o filtro casado
+
 info_hat_casada     = info_rx_filter(N:N:end) > limiar; % Infomação binária casada
 info_hat_nao_casada = info_rx(N:N:end) > limiar;        % Informação binária não casada
 
