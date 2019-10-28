@@ -78,149 +78,201 @@ end
 
 figure(1)
     subplot(321)
-        plot(t(1, 1:8*N), info_tx1(1, 1:8*N), 'LineWidth', 2)
+        plot(t(1, 1:8*N), sinal_1(1, 1:8*N), 'LineWidth', 2)
         title('8 primeiros bits no sinal1 de tempo')
         ylabel('Volts')
         xlabel('Segundos')
         
     subplot(322)
-        plot(t(1, 1:8*N), info_tx2(1, 1:8*N), 'LineWidth', 2)
-        title('8 primeiros bits no sinal1 de tempo')
+        plot(t(1, 1:8*N), sinal_2(1, 1:8*N), 'LineWidth', 2)
+        title('8 primeiros bits no sinal2 de tempo')
         ylabel('Volts')
         xlabel('Segundos')    
         
     subplot(323)
         plot(t(1, 1:8*N), info_rx1(1, 1:8*N), 'LineWidth', 2)
-        title('Sinal recebido em Rx1 (Referente aos primeiros 8 bits)')
+        title('Sinal recebido em Rx1 (8 bits)')
         
     subplot(324)
         plot(t(1, 1:8*N), info_rx2(1, 1:8*N), 'LineWidth', 2)
-        title('Sinal recebido em Rx2 (Referente aos primeiros 8 bits)')
+        title('Sinal recebido em Rx2 (8 bits)')
    
-figure(11)
-    semilogy(0:15,taxa_erro1)
-    title('Probabilidade de erro de bit (Pb) vs. SNR')
-    xlim([0 15])
-    ylim([0.2 0.5])
-    xlabel('SNR')
-    ylabel('Pb')
+    subplot(3,2,[5 6])
+        semilogy(0:15, taxa_erro1, 'LineWidth', 2)
+        title('Probabilidade1 de erro de bit (Pb) vs. SNR')
+        xlim([0 15])
+        ylim([0.2 0.5])
+        xlabel('SNR')
+        ylabel('Pb')
+        hold on
+        semilogy(0:15, taxa_erro2, 'LineWidth', 2)
+        title('Probabilidade2 de erro de bit (Pb) vs. SNR')
+        xlim([0 15])
+        ylim([0.2 0.5])
+        xlabel('SNR')
+        ylabel('Pb')
+        
+        legend('1V', '2V', 'Location','southwest')
+        legend('boxoff') 
+        
     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+% 2. 
+ 
+N         = 50;                              % Cada bit/simbolo possui N amostras
+A         = 1;                               % Amplitude do sinal em volts
+limiar    = A/2;                             % Acima disso é 1. Abaixo é 0
+bits      = 100000;                          % Número de bits na informação
+Rb        = 1e4;                             % Taxa de transmissão
 
-%% 2. 
-%A         = 1;                             % Amplitude do sinal em volts
-%N         = 10;                            % Cada bit possui N amostras 
-%limiar    = A/2;                           % Acima disso é 1. Abaixo é 0
-%info_bin  = [0 1 0 1 1 0 0 1 1 0 1];       % Sequência de informação
-%info_up   = upsample(info_bin, N);         % Sequência pronta para filtragem
-%
-%filtro_tx = ones(1,N);                     % Preparando filtro
-%filtro_rx = fliplr(filtro_tx);             % Preparando filtro
-%
-%info_tx   = filter(filtro_tx, 1, info_up); % Info filtrada/formatada pronta para enviar
-%
-%info_rx        = awgn(info_tx,10);                % Info que chega ao Rx passou por um canal awgn
-%info_rx_filter = filter(filtro_rx, 1, info_rx)/N; % Info recebida filtrada com o filtro casado
-%
-%info_hat_casada     = info_rx_filter(N:N:end) > limiar; % Infomação binária casada
-%info_hat_nao_casada = info_rx(N:N:end) > limiar;        % Informação binária não casada
-%
-%
-%t = 0:1/(length(info_bin)*N):1-(1/(length(info_bin)*N)); % Tempo para os plots
-%
-%figure(2)
-%    subplot(311)
-%        plot(t, info_tx, 'LineWidth', 2)
-%        ylim([-0.1*A 1.1*A])
-%        title('Info original saindo de Tx')
-%        
-%    subplot(312)
-%        plot(t, info_rx, 'LineWidth', 2)
-%        title('Info Rx não filtrada com filtro casado')
-%        
-%    subplot(313)
-%        plot(t, info_rx_filter, 'LineWidth', 2)
-%        title('Info Rx filtrada com filtro casado')
-%    
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%    
-%% 3.   
-%A         = 1;                             % Amplitude do sinal em volts
-%N         = 10;                            % Cada bit possui N amostras 
-%limiar    = A/2;                           % Acima disso é 1. Abaixo é 0
-%info_bin  = [0 1 0 1 1 0 0 1 1 0 1];       % Sequência de informação
-%info_up   = upsample(info_bin, N);         % Sequência pronta para filtragem
-%
-%filtro_tx = ones(1,N);                     % Preparando filtro
-%filtro_rx = fliplr(filtro_tx);             % Preparando filtro
-%
-%info_tx   = filter(filtro_tx, 1, info_up); % Info filtrada/formatada pronta para enviar
-%
-%info_rx         = awgn(info_tx,10);                 % Info que chega ao Rx passou por um canal awgn
-%info_rx_filter  = filter(filtro_rx, 1, info_rx)/N;  % Info recebida filtrada com o filtro casado
-%info_hat_casada = info_rx_filter(N:N:end) > limiar; % Infomação binária casada
-%
-%t = 0:1/(length(info_bin)*N):1-(1/(length(info_bin)*N)); % Tempo para os plots
-%
-%figure(3)
-%    subplot(321)
-%        plot(t, info_tx, 'LineWidth', 2)
-%        ylim([-0.1*A 1.1*A])
-%        title('Info original saindo de Tx')
-%        ylabel('Volst')
-%        xlabel('Segundos')
-%        
-%    subplot(323)
-%        plot(t, info_rx, 'LineWidth', 2)
-%        title('Info Rx chegando não filtrada')    
-%        ylabel('Volst')
-%        xlabel('Segundos')
-%        
-%    subplot(325)
-%        plot(t, info_rx_filter, 'LineWidth', 2)
-%        title('Info Rx filtrada com filtro casado')
-%        ylabel('Volst')
-%        xlabel('Segundos')
-%        
-%Ap        =  1;                            % Amplitude positiva do sinal
-%An        = -1;                            % Amplitude negativa do sinal       
-%N         = 10;                            % Cada bit possui N amostras 
-%limiar    = (Ap+An)/2;                     % Acima disso é 1. Abaixo é 0
-%info_bin  = [0 1 0 1 1 0 0 1 1 0 1];       % Sequência de informação
-%info_amp  = (info_bin.*2)-1;               % Sequência tratada para seus valores bipolares
-%info_up   = upsample(info_amp, N);         % Sequência pronta para filtragem
-%
-%filtro_tx = ones(1,N);                     % Preparando filtro
-%filtro_rx = fliplr(filtro_tx);             % Preparando filtro
-%
-%info_tx   = filter(filtro_tx, 1, info_up); % Info filtrada/formatada pronta para enviar
-%
-%info_rx         = awgn(info_tx,10);                 % Info que chega ao Rx passou por um canal awgn
-%info_rx_filter  = filter(filtro_rx, 1, info_rx)/N;  % Info recebida filtrada com o filtro casado
-%info_hat_casada = info_rx_filter(N:N:end) > limiar; % Infomação binária casada
-%
-%t = 0:1/(length(info_bin)*N):1-(1/(length(info_bin)*N)); % Tempo para os plots
-%
-%    subplot(322)
-%        plot(t, info_tx, 'LineWidth', 2)
-%        ylim([1.1*An 1.1*Ap])
-%        title('Info original saindo de Tx')
-%        ylabel('Volst')
-%        xlabel('Segundos')
-%
-%    subplot(324)
-%        plot(t, info_rx, 'LineWidth', 2)
-%        title('Info Rx chegando não filtrada')    
-%        ylabel('Volst')
-%        xlabel('Segundos')
-%        
-%    subplot(326)
-%        plot(t, info_rx_filter, 'LineWidth', 2)
-%        title('Info Rx filtrada com filtro casado')
-%        ylabel('Volst')
-%        xlabel('Segundos')    
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%% 4.
+info_bin  = randi([0 1],1,bits);             % Sequência de informação
+t         = 0:1/(Rb*N):(bits/Rb)-(1/(Rb*N)); % Tempo 10s
+
+info_up   = upsample(info_bin, N);           % Sequência pronta para filtragem
+filtro_tx = ones(1,N);                       % Preparando filtro Tx
+filtro_rx = fliplr(filtro_tx);               % Preparando filtro Rx
+info_tx   = filter(filtro_tx, 1, info_up);   % Info filtrada 
+sinal     = info_tx*A;                       % Sinal ajustado sua amplitude
+
+
+
+for SNR = 0:15
+    
+    info_rx          = awgn(sinal, SNR-10*(log10(N)));                 % Info não casada
+    info_rx_casada   = filter(filtro_rx, 1, info_rx)/N;                % Info casada
+
+    info_hat         = info_rx(N:N:end) > limiar;                      % Informação binária não casada
+    info_hat_casada  = info_rx_casada(N:N:end) > limiar;               % Informação binária casada
+    
+    num_erro(SNR+1)  = sum(xor(info_bin, info_hat));                   % Número de erro não casada   
+    taxa_erro(SNR+1) = num_erro(SNR+1)/length(info_bin);               % Probabilidade de erro não casada
+   
+    num_erro_casada(SNR+1)  = sum(xor(info_bin, info_hat_casada));     % Número de erro casada   
+    taxa_erro_casada(SNR+1) = num_erro_casada(SNR+1)/length(info_bin); % Probabilidade de erro casada
+    
+end
+
+figure(2)
+    subplot(3,2,[1 2])
+        plot(t(1, 1:8*N), sinal(1, 1:8*N), 'LineWidth', 2)
+        title('8 primeiros bits no sinal de tempo')
+        ylabel('Volts')
+        xlabel('Segundos')
+                
+    subplot(323)
+        plot(t(1, 1:8*N), info_rx(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx não casada (8 bits)')
+        
+    subplot(324)
+        plot(t(1, 1:8*N), info_rx_casada(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx casada (8 bits)')
+   
+    subplot(3,2, [5 6])
+        semilogy(0:15,taxa_erro, 'LineWidth', 2)
+            xlim([0 15])
+            xlabel('SNR')
+            ylabel('Pb')
+            hold on
+        semilogy(0:15,taxa_erro_casada, 'LineWidth', 2)
+            xlim([0 15])
+            xlabel('SNR')
+            ylabel('Pb')
+            title('(Pb) vs. SNR')
+        legend('Não casada', 'Casada', 'Location','southwest')
+        legend('boxoff') 
+        
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+% 3. e 4.   
+
+N         = 50;                              % Cada bit/simbolo possui N amostras
+A         = 1;                               % Amplitude do sinal em volts
+limiar1   = 0.5;                             % Acima disso é 1. Abaixo é 0
+limiar2   = 0;                               % Acima disso é 1. Abaixo é 0
+bits      = 100000;                          % Número de bits na informação
+Rb        = 1e4;                             % Taxa de transmissão
+Bw        = Rb/2;                            % Banda
+
+info_bin  = randi([0 1],1,bits);             % Sequência de informação
+t         = 0:1/(Rb*N):(bits/Rb)-(1/(Rb*N)); % Tempo 10s
+
+info_up   = upsample(info_bin, N);           % Sequência pronta para filtragem
+filtro_tx = ones(1,N);                       % Preparando filtro Tx
+filtro_rx = fliplr(filtro_tx);               % Preparando filtro Rx
+info_tx   = filter(filtro_tx, 1, info_up);   % Info filtrada 
+sinal_pol = info_tx*A;                       % Sinal polar ajustado a sua amplitude: 0 e 1
+sinal_bip = info_tx*A*2-(A/2);               % Sinal bipolar ajustado a sua amplitude: -1 e 1 
+
+
+for SNR = 0:15
+    
+    info_rx_pol          = awgn(sinal_pol, SNR-10*(log10(N)));    % Info recebida
+    info_rx_pol_casada   = filter(filtro_rx, 1, info_rx_pol)/N;   % Info filtrada com filtro casado
+    info_hat_pol         = info_rx_pol_casada(N:N:end) > limiar1; % Informação binária
+    num_erro_pol(SNR+1)  = sum(xor(info_bin, info_hat_pol));      % Número de erro  
+    taxa_erro_pol(SNR+1) = num_erro_pol(SNR+1)/length(info_bin);  % Probabilidade de erro
+    ebno1                = (Bw/Rb)*10^(SNR/10);                   % Energia do bit teórica
+    pb1(SNR+1)           = qfunc(sqrt(ebno1));                    % Probabilidade de erro teórica 
+        
+    info_rx_bip          = awgn(sinal_bip, SNR-10*(log10(N)));    % Info recebida
+    info_rx_bip_casada   = filter(filtro_rx, 1, info_rx_bip)/N;   % Info filtrada com filtro casado
+    info_hat_bip         = info_rx_bip_casada(N:N:end) > limiar2; % Informação binária
+    num_erro_bip(SNR+1)  = sum(xor(info_bin, info_hat_bip));      % Número de erro  
+    taxa_erro_bip(SNR+1) = num_erro_bip(SNR+1)/length(info_bin);  % Probabilidade de erro    
+    ebno2                = (Bw/Rb)*10^(SNR/10);                   % Energia do bit teórica
+    pb2(SNR+1)           = qfunc(sqrt(2*ebno2));                  % Probabilidade de erro teórica    
+   
+end
+
+
+figure(3)
+    subplot(521)
+        plot(t(1, 1:8*N), sinal_pol(1, 1:8*N), 'LineWidth', 2)
+        title('8 primeiros bits no sinal de tempo')
+        ylabel('Volts')
+        xlabel('Segundos')
+                
+    subplot(522)
+        plot(t(1, 1:8*N), sinal_bip(1, 1:8*N), 'LineWidth', 2)
+        title('8 primeiros bits no sinal de tempo')
+        ylabel('Volts')
+        xlabel('Segundos')                
+                
+    subplot(523)
+        plot(t(1, 1:8*N), info_rx_pol(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx Polar não casada (8 bits)')
+        
+    subplot(524)
+        plot(t(1, 1:8*N), info_rx_bip(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx Bipolar não casada (8 bits)')
+   
+    subplot(525)
+        plot(t(1, 1:8*N), info_rx_pol_casada(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx Polar casada (8 bits)')
+        
+    subplot(526)
+        plot(t(1, 1:8*N), info_rx_bip_casada(1, 1:8*N), 'LineWidth', 2)
+        title('Sinal Rx Bipolar casada (8 bits)')
+
+    subplot(5,2, [7 10])
+        semilogy(0:15,taxa_erro_pol, 'LineWidth', 2)
+            xlim([0 15])
+            xlabel('SNR')
+            ylabel('Pb')
+            hold on
+        semilogy(0:15,taxa_erro_bip, 'LineWidth', 2)
+            xlim([0 15])
+            xlabel('SNR')
+            ylabel('Pb')
+            title('(Pb) vs. SNR')
+        semilogy(0:15, pb1, 'LineWidth', 2)
+            hold on
+        semilogy(0:15, pb2, 'LineWidth', 2)
+            legend('Polar', 'Bipolar', 'Teórico Polar', 'Teórico Bipolar', 'Location','southwest')
+            legend('boxoff')     
+   
+
+
+
+
