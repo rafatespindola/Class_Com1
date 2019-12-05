@@ -24,12 +24,13 @@ clear all; close all; clc;
 
 fc       = 10e3;                                    % Frequencia da portadora
 M        = 16;                                      % Número de simbolos 
-N        = 100;                                     % Fator de super amostragem
+N        = 30;                                      % Fator de super amostragem
 info     = randi([0 15], 1, 100);                   % Infomação original
 info_mod = qammod(info, M);                         % Gera as coordenadas da constelação
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 passo    = ((2*length(info))/fc)/(length(info)*N);
-t        = [0:passo:((2*length(info))/fc)-passo];
+t        = 0:passo:((2*length(info))/fc)-passo;
 
 scatterplot(info_mod)                               % Imagem da constelação
 
@@ -56,7 +57,14 @@ figure(3)
     subplot(212)
         plot(t, info_Q_tx)
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 info_tx = info_I_tx + info_Q_tx;
+
+figure(4)
+    plot(t, info_tx)
+
+
+
 
 
 
